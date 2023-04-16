@@ -17,6 +17,6 @@ public class LancadorController {
 	@PatchMapping("ligarMotor")
 	public String ligarMotor() {
 		// example: curl -v --request PATCH http://localhost:8080/ligarMotor
-		return "Motor ligado";
+		return "Motor ligado\n";
 	}
 }
