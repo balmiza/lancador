@@ -1,5 +1,7 @@
 package com.lancador.lancador.controller;
 
+import java.io.IOException;
+
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,14 +20,15 @@ public class LancadorController implements Application{
 		return "Motor ligado\n";
 	}
 
-	@Override
+	
 	@PostMapping("ligarLed")
+	@Override
 	public void execute(Context pi4j) {
-		// example: curl -v --request PATCH http://localhost:8080/ligarLed
+		// example: curl -v --request POST http://localhost:8080/ligarLed
 		System.out.println("Simple LED app started ...");
 		
 		// Create a new SimpleLED component
-		SimpleLed led = new SimpleLed(pi4j, PIN.D26);
+		SimpleLed led = new SimpleLed(pi4j, PIN.D20);
 
 		// Turn on the LED to have a defined state
 		System.out.println("Turn on LED.");
@@ -44,6 +47,21 @@ public class LancadorController implements Application{
 		delay(2000);
 
 		System.out.println("Simple LED app done.");
+	}
+	
+	@PatchMapping("ligarLed2")
+	public void ligarLed2() throws IOException, InterruptedException {
+		// example: curl -v --request PATCH http://localhost:8080/ligarLed2
+		Runtime runtime = Runtime.getRuntime();
+		runtime.exec("gpio mode 4 out");
+		
+		for (int i = 0; i < 10; i++) {
+			runtime.exec("gpio write 4 1");
+			Thread.sleep(500);
+			runtime.exec("gpio write 4 0");
+			Thread.sleep(500);
+		}
+		//return "Motor ligado\n";
 	}
 
 	
