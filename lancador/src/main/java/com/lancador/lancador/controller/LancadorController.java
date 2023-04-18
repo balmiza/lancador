@@ -1,64 +1,26 @@
 package com.lancador.lancador.controller;
 
-import java.io.IOException;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lancador.lancador.service.Application;
-import com.lancador.lancador.service.SimpleLed;
-import com.lancador.lancador.utils.PIN;
 import com.pi4j.Pi4J;
-import com.pi4j.context.Context;
 import com.pi4j.io.gpio.digital.DigitalState;
 
-
 @RestController
-public class LancadorController implements Application{
-	
-	private static Scanner cmd;
+public class LancadorController {
 
-	@PatchMapping("ligarMotor")
+	@GetMapping("/")
 	public String ligarMotor() {
-		// example: curl -v --request PATCH http://localhost:8080/ligarMotor
-		return "Motor ligado\n";
+		// example: curl -v GET http://localhost:8080/
+		return "API - OK\n";
 	}
 
-	
-	@PostMapping("ligarLed")
-	@Override
-	public void execute(Context pi4j) {
-		// example: curl -v --request POST http://localhost:8080/ligarLed
-		System.out.println("Simple LED app started ...");
-		
-		// Create a new SimpleLED component
-		SimpleLed led = new SimpleLed(pi4j, PIN.D20);
-
-		// Turn on the LED to have a defined state
-		System.out.println("Turn on LED.");
-		led.on();
-		delay(1000);
-
-		// Make a flashing light by toggling the LED every second
-		for (int i = 0; i < 10; i++) {
-			System.out.println("Current LED state is " + led.toggleState() + ".");
-			delay(1000);
-		}
-
-		// That's all so turn off the relay and quit
-		led.off();
-		System.out.println("Turn off LED.");
-		delay(2000);
-
-		System.out.println("Simple LED app done.");
-	}
-	
 	@PatchMapping("ligarLed2")
-	public void ligarLed2() throws IOException, InterruptedException {
-		
+	public void ligarLed2() {
+
 		int DIGITAL_OUTPUT_PIN = 4;
 		// Initialize Pi4J with an auto context
 		// An auto context includes AUTO-DETECT BINDINGS enabled
@@ -70,23 +32,18 @@ public class LancadorController implements Application{
 		var output = pi4j.dout().create(DIGITAL_OUTPUT_PIN);
 		output.config().shutdownState(DigitalState.HIGH);
 
-		// setup a digital output listener to listen for any state changes on the digital output
+		// setup a digital output listener to listen for any state changes on the
+		// digital output
 		output.addListener(System.out::println);
 
 		// lets invoke some changes on the digital output
-		output.state(DigitalState.HIGH)
-		          .state(DigitalState.LOW)
-		          .state(DigitalState.HIGH)
-		          .state(DigitalState.LOW);
+		output.state(DigitalState.HIGH).state(DigitalState.LOW).state(DigitalState.HIGH).state(DigitalState.LOW);
 
 		// lets toggle the digital output state a few times
-		output.toggle()
-		          .toggle()
-		          .toggle();
+		output.toggle().toggle().toggle();
 
 		// another friendly method of setting output state
-		output.high()
-		          .low();
+		output.high().low();
 
 		// lets read the digital output state
 		System.out.print("CURRENT DIGITAL OUTPUT [" + output + "] STATE IS [");
@@ -99,11 +56,7 @@ public class LancadorController implements Application{
 
 		// shutdown Pi4J
 		pi4j.shutdown();
-		
-		
-		
-		
+
 	}
 
-	
 }
