@@ -1,62 +1,76 @@
 package com.lancador.lancador.controller;
 
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pi4j.Pi4J;
-import com.pi4j.io.gpio.digital.DigitalState;
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+
+
 
 @RestController
 public class LancadorController {
 
 	@GetMapping("/")
 	public String ligarMotor() {
-		// example: curl -v GET http://localhost:8080/
+		// example: curl -v http://localhost:8080/
 		return "API - OK\n";
 	}
+	
+	@GetMapping("/teste")
+	public String teste() throws InterruptedException {
+		// example: curl -v http://localhost:8080/teste
+		
+		System.out.println("<--Pi4J--> GPIO Control Example ... started.");
 
-	@PatchMapping("ligarLed2")
-	public void ligarLed2() {
+        // create gpio controller
+        final GpioController gpio = GpioFactory.getInstance();
+        
+     // provision gpio pin #01 as an output pin and turn on
+        final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, "MyLED", PinState.HIGH);
+        
+     // set shutdown state for this pin
+        pin.setShutdownOptions(true, PinState.LOW);
 
-		int DIGITAL_OUTPUT_PIN = 4;
-		// Initialize Pi4J with an auto context
-		// An auto context includes AUTO-DETECT BINDINGS enabled
-		// which will load all detected Pi4J extension libraries
-		// (Platforms and Providers) in the class path
-		var pi4j = Pi4J.newAutoContext();
+        System.out.println("--> GPIO state should be: ON");
 
-		// create a digital output instance using the default digital output provider
-		var output = pi4j.dout().create(DIGITAL_OUTPUT_PIN);
-		output.config().shutdownState(DigitalState.HIGH);
+        Thread.sleep(5000);
 
-		// setup a digital output listener to listen for any state changes on the
-		// digital output
-		output.addListener(System.out::println);
+        // turn off gpio pin #01
+        pin.low();
+        System.out.println("--> GPIO state should be: OFF");
 
-		// lets invoke some changes on the digital output
-		output.state(DigitalState.HIGH).state(DigitalState.LOW).state(DigitalState.HIGH).state(DigitalState.LOW);
+        Thread.sleep(5000);
 
-		// lets toggle the digital output state a few times
-		output.toggle().toggle().toggle();
+        // toggle the current state of gpio pin #01 (should turn on)
+        pin.toggle();
+        System.out.println("--> GPIO state should be: ON");
 
-		// another friendly method of setting output state
-		output.high().low();
+        Thread.sleep(5000);
 
-		// lets read the digital output state
-		System.out.print("CURRENT DIGITAL OUTPUT [" + output + "] STATE IS [");
-		System.out.println(output.state() + "]");
+        // toggle the current state of gpio pin #01  (should turn off)
+        pin.toggle();
+        System.out.println("--> GPIO state should be: OFF");
 
-		// pulse to HIGH state for 3 seconds
-		System.out.println("PULSING OUTPUT STATE TO HIGH FOR 3 SECONDS");
-		output.pulse(3, TimeUnit.SECONDS, DigitalState.HIGH);
-		System.out.println("PULSING OUTPUT STATE COMPLETE");
+        Thread.sleep(5000);
 
-		// shutdown Pi4J
-		pi4j.shutdown();
+        // turn on gpio pin #01 for 1 second and then off
+        System.out.println("--> GPIO state should be: ON for only 1 second");
+        pin.pulse(1000, true); // set second argument to 'true' use a blocking call
 
+        // stop all GPIO activity/threads by shutting down the GPIO controller
+        // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+        gpio.shutdown();
+
+        System.out.println("Exiting ControlGpioExample");
+		
+		return "teste - OK\n";
 	}
+	
+	
+
 
 }

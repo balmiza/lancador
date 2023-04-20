@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.lancador</groupId>
 	<artifactId>lancador</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<name>lancador</name>
 	<description>Projeto lancador de bolas para Pets</description>
 	<properties>
@@ -43,27 +43,27 @@
 		<dependency>
 			<groupId>com.pi4j</groupId>
 			<artifactId>pi4j-core</artifactId>
-			<version>2.1.1</version>
+			<version>1.2</version>
 		</dependency>
 		<!-- Pi4J Raspberry Pi Platform -->
-        <dependency>
-            <groupId>com.pi4j</groupId>
-            <artifactId>pi4j-plugin-raspberrypi</artifactId>
-            <version>2.1.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.pi4j</groupId>-->
+<!--            <artifactId>pi4j-plugin-raspberrypi</artifactId>-->
+<!--            <version>2.1.1</version>-->
+<!--        </dependency>-->
         <!-- Pi4J Raspberry Pi GPIO -->
-        <dependency>
-            <groupId>com.pi4j</groupId>
-            <artifactId>pi4j-plugin-pigpio</artifactId>
-            <version>2.1.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.pi4j</groupId>-->
+<!--            <artifactId>pi4j-plugin-pigpio</artifactId>-->
+<!--            <version>2.1.1</version>-->
+<!--        </dependency>-->
                 <!-- Pi4J Mock Platform -->
-        <dependency>
-            <groupId>com.pi4j</groupId>
-            <artifactId>pi4j-plugin-mock</artifactId>
-            <version>2.1.1</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.pi4j</groupId>-->
+<!--            <artifactId>pi4j-plugin-mock</artifactId>-->
+<!--            <version>2.1.1</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
                 <!-- PicoCLI -->
         <dependency>
             <groupId>info.picocli</groupId>
@@ -71,11 +71,11 @@
             <version>4.6.3</version>
         </dependency>
                 <!-- Plugin for I2C -->
-        <dependency>
-            <groupId>com.pi4j</groupId>
-            <artifactId>pi4j-plugin-linuxfs</artifactId>
-            <version>2.1.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.pi4j</groupId>-->
+<!--            <artifactId>pi4j-plugin-linuxfs</artifactId>-->
+<!--            <version>2.1.1</version>-->
+<!--        </dependency>-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
